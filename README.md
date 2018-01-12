@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/3w3y1knysveuruuj/branch/master?svg=true)](https://ci.appveyor.com/project/ttutisani/portfoliotracker/branch/master)
+
 # PortfolioTracker
 C# models to track investment portfolios
 
