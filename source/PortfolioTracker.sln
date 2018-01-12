@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2020
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioTracker.Core", "PortfolioTracker.Core\PortfolioTracker.Core.csproj", "{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PortfolioTracker.UnitTests", "PortfolioTracker.UnitTests\PortfolioTracker.UnitTests.csproj", "{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {577F1B2C-140D-4356-8192-BB683072C209}
+	EndGlobalSection
+EndGlobal
