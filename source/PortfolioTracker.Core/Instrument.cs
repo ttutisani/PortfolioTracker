@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTracker.Core
 {
-    public sealed class Instrument
+    public sealed class Instrument : Markers.IEntity, Markers.IAggregateRoot
     {
         public Instrument(string symbol, string name, decimal currentPrice)
         {
