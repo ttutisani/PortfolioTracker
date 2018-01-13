@@ -9,10 +9,10 @@
             CurrentPrice = currentPrice;
         }
 
-        public string Symbol { get; private set; }
+        public string Symbol { get; }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public decimal CurrentPrice { get; private set; }
+        public decimal CurrentPrice { get; }
     }
 }

@@ -10,3 +10,9 @@ Instrument (entity, aggregate root)
 
 AmountAndPercentage (value object)
 	contains amount and percentage that this amount represents out of total.
+
+MoneyPerformanceIndicators (value object)
+	represents derived calculations based on cost basis and market value amounts.
+
+Lot (entity, aggregate root)
+	represents a lot - record of financial trade involving Instrument.

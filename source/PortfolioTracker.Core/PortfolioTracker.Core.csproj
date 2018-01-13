@@ -42,9 +42,11 @@
   <ItemGroup>
     <Compile Include="AmountAndPercentage.cs" />
     <Compile Include="Instrument.cs" />
+    <Compile Include="Lot.cs" />
     <Compile Include="Markers\IAggregateRoot.cs" />
     <Compile Include="Markers\IEntity.cs" />
     <Compile Include="Markers\IValueObject.cs" />
+    <Compile Include="MoneyPerformanceIndicators.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

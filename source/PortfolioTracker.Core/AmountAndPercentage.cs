@@ -8,8 +8,8 @@
             Percentage = percentage;
         }
 
-        public decimal Amount { get; private set; }
+        public decimal Amount { get; }
 
-        public decimal Percentage { get; set; }
+        public decimal Percentage { get; }
     }
 }

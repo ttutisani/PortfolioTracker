@@ -1,4 +1,5 @@
-﻿using PortfolioTracker.Core;
+﻿using FluentAssertions;
+using PortfolioTracker.Core;
 using Xunit;
 
 namespace PortfolioTracker.UnitTests
@@ -16,8 +17,8 @@ namespace PortfolioTracker.UnitTests
             var sut = new AmountAndPercentage(expectedAmount, expectedPercentage);
 
             //assert.
-            Assert.Equal(expectedAmount, sut.Amount);
-            Assert.Equal(expectedPercentage, sut.Percentage);
+            sut.Amount.Should().Be(expectedAmount);
+            sut.Percentage.Should().Be(expectedPercentage);
         }
     }
 }
