@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using PortfolioTracker2.Core;
+using PortfolioTracker.Core;
 using System;
 using Xunit;
 

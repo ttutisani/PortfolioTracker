@@ -1,4 +1,4 @@
-﻿namespace PortfolioTracker2.Core
+﻿namespace PortfolioTracker.Core
 {
     public sealed class Instrument : Markers.IEntity, Markers.IAggregateRoot
     {

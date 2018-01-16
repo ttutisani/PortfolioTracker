@@ -1,4 +1,4 @@
-﻿namespace PortfolioTracker2.Core.Markers
+﻿namespace PortfolioTracker.Core.Markers
 {
     public interface IValueObject
     {
