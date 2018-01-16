@@ -8,8 +8,8 @@
     <ProjectGuid>{827470EA-FD0F-4FD8-8FDA-7C20230A46DF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PortfolioTracker.UnitTests</RootNamespace>
-    <AssemblyName>PortfolioTracker.UnitTests</AssemblyName>
+    <RootNamespace>PortfolioTracker2.UnitTests</RootNamespace>
+    <AssemblyName>PortfolioTracker2.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -76,9 +76,9 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PortfolioTracker.Core\PortfolioTracker.Core.csproj">
-      <Project>{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}</Project>
-      <Name>PortfolioTracker.Core</Name>
+    <ProjectReference Include="..\PortfolioTracker2.Core\PortfolioTracker2.Core.csproj">
+      <Project>{20451e57-b6a9-46dd-b70b-c35b47d5c6aa}</Project>
+      <Name>PortfolioTracker2.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

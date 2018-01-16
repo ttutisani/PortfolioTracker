@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PortfolioTracker.Core
+namespace PortfolioTracker2.Core
 {
     public sealed class Lot : Markers.IEntity, Markers.IAggregateRoot
     {

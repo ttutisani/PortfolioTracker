@@ -1,4 +1,4 @@
-﻿namespace PortfolioTracker.Core.Markers
+﻿namespace PortfolioTracker2.Core.Markers
 {
     public interface IEntity
     {

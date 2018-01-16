@@ -7,8 +7,8 @@
     <ProjectGuid>{20451E57-B6A9-46DD-B70B-C35B47D5C6AA}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PortfolioTracker.Core</RootNamespace>
-    <AssemblyName>PortfolioTracker.Core</AssemblyName>
+    <RootNamespace>PortfolioTracker2.Core</RootNamespace>
+    <AssemblyName>PortfolioTracker2.Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

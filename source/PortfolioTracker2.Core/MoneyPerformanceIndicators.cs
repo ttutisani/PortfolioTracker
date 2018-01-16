@@ -1,4 +1,4 @@
-﻿namespace PortfolioTracker.Core
+﻿namespace PortfolioTracker2.Core
 {
     public sealed class MoneyPerformanceIndicators : Markers.IValueObject
     {
