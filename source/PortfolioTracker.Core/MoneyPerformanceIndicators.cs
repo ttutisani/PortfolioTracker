@@ -1,20 +1,89 @@
-﻿namespace PortfolioTracker.Core
-{
-    public sealed class MoneyPerformanceIndicators : Markers.IValueObject
-    {
-        private const int _daysInYear = 365;
+﻿using PortfolioTracker.Core.Markers;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
-        public MoneyPerformanceIndicators(
-            int daysSincePurchase,
-            AmountAndPercentage costBasis,
-            AmountAndPercentage marketValue)
+namespace PortfolioTracker.Core
+{
+    public sealed class MoneyPerformanceIndicators : IValueObject
+    {
+        #region Total to annual conversion strategy
+
+        public interface IAnnualGainCalculator
         {
-            DaysSincePurchase = daysSincePurchase;
-            CostBasis = costBasis ?? throw new System.ArgumentNullException(nameof(costBasis));
-            MarketValue = marketValue ?? throw new System.ArgumentNullException(nameof(marketValue));
+            AmountAndPercentage GetAnnualGain(
+                AmountAndPercentage costBasis,
+                AmountAndPercentage martketValue,
+                AmountAndPercentage totalGain
+                );
         }
 
-        public int DaysSincePurchase { get; }
+        public sealed class AnnualGainCalculatorForLot : IAnnualGainCalculator
+        {
+            private readonly DateTime _purchaseDate;
+            private readonly DateTime _now;
+
+            public AnnualGainCalculatorForLot(
+                DateTime purchaseDate, 
+                DateTime now)
+            {
+                _purchaseDate = purchaseDate;
+                _now = now;
+            }
+
+            public AmountAndPercentage GetAnnualGain(
+                AmountAndPercentage costBasis,
+                AmountAndPercentage martketValue,
+                AmountAndPercentage totalGain
+                )
+            {
+                var daysSincePurchase = _now.Subtract(_purchaseDate).Days;
+
+                var annualGainAmount = totalGain.Amount / daysSincePurchase * Constants.DaysInYear;
+                var annualGainPercentage = totalGain.Percentage / daysSincePurchase * Constants.DaysInYear;
+
+                return new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+            }
+        }
+
+        public sealed class AnnualGainCalculatorForHolding : IAnnualGainCalculator
+        {
+            private readonly IEnumerable<Lot> _lots;
+
+            public AnnualGainCalculatorForHolding(IEnumerable<Lot> lots)
+            {
+                _lots = lots ?? throw new ArgumentNullException(nameof(lots));
+            }
+
+            public AmountAndPercentage GetAnnualGain(
+                AmountAndPercentage costBasis,
+                AmountAndPercentage martketValue,
+                AmountAndPercentage totalGain
+                )
+            {
+                var annualGainAmount = _lots.Sum(lot => lot.GetAnnualGainAmount());
+                var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
+
+                //what do I need?
+                var annualGain = new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+
+                return annualGain;
+            }
+        }
+
+        #endregion
+
+        private readonly IAnnualGainCalculator _totalToAnnualGain;
+
+        public MoneyPerformanceIndicators(
+            AmountAndPercentage costBasis,
+            AmountAndPercentage marketValue,
+            IAnnualGainCalculator totalToAnnualGain)
+        {
+            CostBasis = costBasis ?? throw new System.ArgumentNullException(nameof(costBasis));
+            MarketValue = marketValue ?? throw new System.ArgumentNullException(nameof(marketValue));
+            _totalToAnnualGain = totalToAnnualGain ?? throw new System.ArgumentNullException(nameof(totalToAnnualGain));
+        }
 
         public AmountAndPercentage CostBasis { get; }
 
@@ -32,10 +101,18 @@
         {
             var totalGain = GetTotalGain();
 
-            var annualGainAmount = totalGain.Amount / DaysSincePurchase * _daysInYear;
-            var annualGainPercentage = totalGain.Percentage / DaysSincePurchase * _daysInYear;
-
-            return new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+            return _totalToAnnualGain.GetAnnualGain(CostBasis, MarketValue, totalGain);
         }
+
+        #region IValueObject members
+
+        public bool IsSameAs(IValueObject other)
+        {
+            return other is MoneyPerformanceIndicators otherPerformance
+                ? CostBasis.IsSameAs(otherPerformance.CostBasis) && MarketValue.IsSameAs(otherPerformance.MarketValue)
+                : false;
+        }
+
+        #endregion
     }
 }

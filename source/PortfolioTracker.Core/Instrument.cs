@@ -1,6 +1,8 @@
-﻿namespace PortfolioTracker.Core
+﻿using PortfolioTracker.Core.Markers;
+
+namespace PortfolioTracker.Core
 {
-    public sealed class Instrument : Markers.IEntity, Markers.IAggregateRoot
+    public sealed class Instrument : IEntity, IAggregateRoot
     {
         public Instrument(string symbol, string name, decimal currentPrice)
         {
@@ -14,5 +16,16 @@
         public string Name { get; }
 
         public decimal CurrentPrice { get; }
+
+        #region IEntity members
+
+        public bool IsSameAs(IEntity other)
+        {
+            return other is Instrument otherInstrument
+                ? Symbol == otherInstrument.Symbol
+                : false;
+        }
+
+        #endregion IEntity members
     }
 }

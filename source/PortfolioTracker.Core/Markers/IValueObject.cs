@@ -2,5 +2,6 @@
 {
     public interface IValueObject
     {
+        bool IsSameAs(IValueObject other);
     }
 }

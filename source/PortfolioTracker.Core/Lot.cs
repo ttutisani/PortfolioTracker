@@ -1,16 +1,20 @@
 ﻿using System;
+using PortfolioTracker.Core.Markers;
 
 namespace PortfolioTracker.Core
 {
-    public sealed class Lot : Markers.IEntity, Markers.IAggregateRoot
+    public sealed class Lot : IEntity, IAggregateRoot
     {
-        public Lot(DateTime purchaseDate, Instrument instrument, decimal purchasePrice, string notes)
+        public Lot(Guid id, DateTime purchaseDate, Instrument instrument, decimal purchasePrice, string notes = null)
         {
+            Id = id;
             PurchaseDate = purchaseDate;
             Instrument = instrument ?? throw new ArgumentNullException(nameof(instrument));
             PurchasePrice = purchasePrice;
             Notes = notes;
         }
+
+        public Guid Id { get; }
 
         public DateTime PurchaseDate { get; }
 
@@ -20,16 +24,43 @@ namespace PortfolioTracker.Core
 
         public string Notes { get; }
 
-        public MoneyPerformanceIndicators GetPerformance(
+        public void RefreshPerformance(
             DateTime now, 
             decimal totalCostBasis, 
             decimal totalMarketValue)
         {
-            var daysSincePurchase = now.Subtract(PurchaseDate).Days;
             var costBasis = new AmountAndPercentage(PurchasePrice, PurchasePrice / totalCostBasis * 100);
             var marketValue = new AmountAndPercentage(Instrument.CurrentPrice, Instrument.CurrentPrice / totalMarketValue * 100);
 
-            return new MoneyPerformanceIndicators(daysSincePurchase, costBasis, marketValue);
+            Performance = new MoneyPerformanceIndicators(costBasis, marketValue, new MoneyPerformanceIndicators.AnnualGainCalculatorForLot(PurchaseDate, now));
         }
+
+        public bool IsForInstrument(Instrument instrument)
+        {
+            return Instrument.IsSameAs(instrument);
+        }
+
+        public MoneyPerformanceIndicators Performance { get; private set; }
+
+        public decimal GetCurrentPrice()
+        {
+            return Instrument.CurrentPrice;
+        }
+
+        #region IEntity members
+
+        public bool IsSameAs(IEntity other)
+        {
+            return other is Lot otherLot
+                ? Id == otherLot.Id
+                : false;
+        }
+
+        public decimal GetAnnualGainAmount()
+        {
+            return Performance.GetAnnualGain().Amount;
+        }
+
+        #endregion
     }
 }

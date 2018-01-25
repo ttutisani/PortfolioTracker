@@ -18,4 +18,32 @@ public sealed class AmountAndPercentageTests
         sut.Amount.Should().Be(expectedAmount);
         sut.Percentage.Should().Be(expectedPercentage);
     }
+
+    public static object[][] IsSameAs_TestData
+    {
+        get
+        {
+            var sut = new AmountAndPercentage(1, 2);
+            var clone = new AmountAndPercentage(sut.Amount, sut.Percentage);
+            var different = new AmountAndPercentage(2, 1);
+
+            return new[]
+            {
+                new object[] { sut, sut, true },
+                new object[] { sut, clone, true },
+                new object[] { sut, different, false }
+            };
+        }
+    }
+
+    [Theory]
+    [MemberData(nameof(IsSameAs_TestData))]
+    public void IsSameAs_Compares_As_ValueObjects(AmountAndPercentage sut, AmountAndPercentage other, bool same)
+    {
+        //act.
+        var isSame = sut.IsSameAs(other);
+
+        //assert.
+        isSame.Should().Be(same);
+    }
 }
