@@ -16,3 +16,6 @@ MoneyPerformanceIndicators (value object)
 
 Lot (entity, aggregate root)
 	represents a lot - record of financial trade involving Instrument.
+
+Holding (entity)
+	represents a portfolio subset, targeting a single instrument, by aggregating lots buying that instrument.
