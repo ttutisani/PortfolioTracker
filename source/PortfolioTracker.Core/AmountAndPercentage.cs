@@ -19,7 +19,8 @@ namespace PortfolioTracker.Core
         public bool IsSameAs(IValueObject other)
         {
             return other is AmountAndPercentage otherAmountAndPercentage
-                ? Amount == otherAmountAndPercentage.Amount && Percentage == otherAmountAndPercentage.Percentage
+                ? Amount == otherAmountAndPercentage.Amount 
+                    && Percentage == otherAmountAndPercentage.Percentage
                 : false;
         }
 

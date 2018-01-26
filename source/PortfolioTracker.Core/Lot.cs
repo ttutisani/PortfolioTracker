@@ -5,7 +5,12 @@ namespace PortfolioTracker.Core
 {
     public sealed class Lot : IEntity, IAggregateRoot
     {
-        public Lot(Guid id, DateTime purchaseDate, Instrument instrument, decimal purchasePrice, string notes = null)
+        public Lot(
+            Guid id, 
+            DateTime purchaseDate, 
+            Instrument instrument, 
+            decimal purchasePrice, 
+            string notes = null)
         {
             Id = id;
             PurchaseDate = purchaseDate;
@@ -29,10 +34,18 @@ namespace PortfolioTracker.Core
             decimal totalCostBasis, 
             decimal totalMarketValue)
         {
-            var costBasis = new AmountAndPercentage(PurchasePrice, PurchasePrice / totalCostBasis * 100);
-            var marketValue = new AmountAndPercentage(Instrument.CurrentPrice, Instrument.CurrentPrice / totalMarketValue * 100);
+            var costBasis = new AmountAndPercentage(
+                PurchasePrice, 
+                PurchasePrice / totalCostBasis * 100);
 
-            Performance = new MoneyPerformanceIndicators(costBasis, marketValue, new MoneyPerformanceIndicators.AnnualGainCalculatorForLot(PurchaseDate, now));
+            var marketValue = new AmountAndPercentage(
+                Instrument.CurrentPrice, 
+                Instrument.CurrentPrice / totalMarketValue * 100);
+
+            Performance = new MoneyPerformanceIndicators(
+                costBasis, 
+                marketValue, 
+                new MoneyPerformanceIndicators.AnnualGainCalculatorForLot(PurchaseDate, now));
         }
 
         public bool IsForInstrument(Instrument instrument)

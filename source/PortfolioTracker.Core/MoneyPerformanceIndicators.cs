@@ -64,8 +64,9 @@ namespace PortfolioTracker.Core
                 var annualGainAmount = _lots.Sum(lot => lot.GetAnnualGainAmount());
                 var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
 
-                //what do I need?
-                var annualGain = new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+                var annualGain = new AmountAndPercentage(
+                    annualGainAmount, 
+                    annualGainPercentage);
 
                 return annualGain;
             }
@@ -80,9 +81,9 @@ namespace PortfolioTracker.Core
             AmountAndPercentage marketValue,
             IAnnualGainCalculator totalToAnnualGain)
         {
-            CostBasis = costBasis ?? throw new System.ArgumentNullException(nameof(costBasis));
-            MarketValue = marketValue ?? throw new System.ArgumentNullException(nameof(marketValue));
-            _totalToAnnualGain = totalToAnnualGain ?? throw new System.ArgumentNullException(nameof(totalToAnnualGain));
+            CostBasis = costBasis ?? throw new ArgumentNullException(nameof(costBasis));
+            MarketValue = marketValue ?? throw new ArgumentNullException(nameof(marketValue));
+            _totalToAnnualGain = totalToAnnualGain ?? throw new ArgumentNullException(nameof(totalToAnnualGain));
         }
 
         public AmountAndPercentage CostBasis { get; }
@@ -101,7 +102,10 @@ namespace PortfolioTracker.Core
         {
             var totalGain = GetTotalGain();
 
-            return _totalToAnnualGain.GetAnnualGain(CostBasis, MarketValue, totalGain);
+            return _totalToAnnualGain.GetAnnualGain(
+                CostBasis, 
+                MarketValue, 
+                totalGain);
         }
 
         #region IValueObject members
@@ -109,7 +113,8 @@ namespace PortfolioTracker.Core
         public bool IsSameAs(IValueObject other)
         {
             return other is MoneyPerformanceIndicators otherPerformance
-                ? CostBasis.IsSameAs(otherPerformance.CostBasis) && MarketValue.IsSameAs(otherPerformance.MarketValue)
+                ? CostBasis.IsSameAs(otherPerformance.CostBasis) 
+                    && MarketValue.IsSameAs(otherPerformance.MarketValue)
                 : false;
         }
 

@@ -8,10 +8,14 @@ namespace PortfolioTracker.Core
 {
     public sealed class Holding : IEntity
     {
-        public Holding(Guid id, Instrument instrument, IList<Lot> lots = null, string notes = null)
+        public Holding(
+            Guid id, 
+            Instrument instrument, 
+            IList<Lot> lots = null, 
+            string notes = null)
         {
             Id = id;
-            Instrument = instrument ?? throw new System.ArgumentNullException(nameof(instrument));
+            Instrument = instrument ?? throw new ArgumentNullException(nameof(instrument));
 
             ValidateLots(instrument, lots);
             Lots = new ReadOnlyCollection<Lot>(lots ?? new List<Lot>());
@@ -54,8 +58,14 @@ namespace PortfolioTracker.Core
             }
 
             Performance = new MoneyPerformanceIndicators(
-                new AmountAndPercentage(totalLotCostBasis, totalLotCostBasis / totalCostBasis * 100),
-                new AmountAndPercentage(totalLotMarketValue, totalLotMarketValue / totalMarketValue * 100),
+                new AmountAndPercentage(
+                    totalLotCostBasis, 
+                    totalLotCostBasis / totalCostBasis * 100),
+
+                new AmountAndPercentage(
+                    totalLotMarketValue, 
+                    totalLotMarketValue / totalMarketValue * 100),
+
                 new MoneyPerformanceIndicators.AnnualGainCalculatorForHolding(Lots)
                 );
         }
