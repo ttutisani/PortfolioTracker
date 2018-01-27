@@ -19,3 +19,6 @@ Lot (entity, aggregate root)
 
 Holding (entity)
 	represents a portfolio subset, targeting a single instrument, by aggregating lots buying that instrument.
+
+Portfolio (entity, aggregate root)
+	represents a single portfolio, aggregating holdings that the portfolio consists of.
