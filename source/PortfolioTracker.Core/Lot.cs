@@ -29,6 +29,22 @@ namespace PortfolioTracker.Core
 
         public string Notes { get; }
 
+        #region IEntity members
+
+        public bool IsSameAs(IEntity other)
+        {
+            return other is Lot otherLot
+                ? Id == otherLot.Id
+                : false;
+        }
+
+        #endregion
+
+        public decimal GetAnnualGainAmount()
+        {
+            return Performance.GetAnnualGain().Amount;
+        }
+
         public void RefreshPerformance(
             DateTime now, 
             decimal totalCostBasis, 
@@ -48,32 +64,16 @@ namespace PortfolioTracker.Core
                 new MoneyPerformanceIndicators.AnnualGainCalculatorForLot(PurchaseDate, now));
         }
 
+        public MoneyPerformanceIndicators Performance { get; private set; }
+
         public bool IsForInstrument(Instrument instrument)
         {
             return Instrument.IsSameAs(instrument);
         }
 
-        public MoneyPerformanceIndicators Performance { get; private set; }
-
         public decimal GetCurrentPrice()
         {
             return Instrument.CurrentPrice;
         }
-
-        #region IEntity members
-
-        public bool IsSameAs(IEntity other)
-        {
-            return other is Lot otherLot
-                ? Id == otherLot.Id
-                : false;
-        }
-
-        public decimal GetAnnualGainAmount()
-        {
-            return Performance.GetAnnualGain().Amount;
-        }
-
-        #endregion
     }
 }

@@ -78,5 +78,15 @@ public sealed class LotTests
         performance.MarketValue.Should().NotBeNull();
         performance.MarketValue.Amount.Should().Be(10m);
         performance.MarketValue.Percentage.Should().Be(50m);
+
+        var totalGain = performance.GetTotalGain();
+        totalGain.Should().NotBeNull();
+        totalGain.Amount.Should().Be(performance.MarketValue.Amount - performance.CostBasis.Amount);
+        totalGain.Percentage.Should().Be(totalGain.Amount / performance.CostBasis.Amount * 100);
+
+        var annualGain = performance.GetAnnualGain();
+        annualGain.Should().NotBeNull();
+        annualGain.Amount.Should().Be((10m - 1m) * Constants.DaysInYear);
+        annualGain.Percentage.Should().Be(annualGain.Amount / performance.CostBasis.Amount * 100);
     }
 }

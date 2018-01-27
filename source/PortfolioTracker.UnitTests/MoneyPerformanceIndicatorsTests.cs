@@ -49,7 +49,7 @@ public sealed class MoneyPerformanceIndicatorsTests
         //arrange.
         var expectedAnnualGain = new AmountAndPercentage(10, 10);
         var converter = new Mock<MoneyPerformanceIndicators.IAnnualGainCalculator>();
-        converter.Setup(c => c.GetAnnualGain(It.IsAny<AmountAndPercentage>(), It.IsAny<AmountAndPercentage>(), It.IsAny<AmountAndPercentage>()))
+        converter.Setup(c => c.GetAnnualGain(It.IsAny<AmountAndPercentage>(), It.IsAny<AmountAndPercentage>()))
             .Returns(expectedAnnualGain);
 
         var sut = new MoneyPerformanceIndicators(
@@ -62,7 +62,7 @@ public sealed class MoneyPerformanceIndicatorsTests
 
         //assert.
         annualGain.Should().BeSameAs(expectedAnnualGain);
-        converter.Verify(c => c.GetAnnualGain(It.Is<AmountAndPercentage>(aap => aap.IsSameAs(sut.CostBasis)), It.Is<AmountAndPercentage>(aap => aap.IsSameAs(sut.MarketValue)), It.Is<AmountAndPercentage>(aap => aap.IsSameAs(sut.GetTotalGain()))), Times.Once);
+        converter.Verify(c => c.GetAnnualGain(It.Is<AmountAndPercentage>(aap => aap.IsSameAs(sut.CostBasis)), It.Is<AmountAndPercentage>(aap => aap.IsSameAs(sut.MarketValue))), Times.Once);
     }
 
     public static object[][] IsSameAs_TestData

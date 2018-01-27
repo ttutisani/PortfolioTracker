@@ -123,16 +123,14 @@ public sealed class HoldingTests
         performance.MarketValue.Amount.Should().Be(8m);
         performance.MarketValue.Percentage.Should().Be(50m);
 
+        var totalGain = performance.GetTotalGain();
+        totalGain.Should().NotBeNull();
+        totalGain.Amount.Should().Be(performance.MarketValue.Amount - performance.CostBasis.Amount);
+        totalGain.Percentage.Should().Be(totalGain.Amount / performance.CostBasis.Amount * 100);
+
         var annualGain = performance.GetAnnualGain();
         annualGain.Should().NotBeNull();
-
-        var lot1AnnualGain = (4m - 1m) * Constants.DaysInYear;
-        var lot2AnnualGain = (4m - 2m) / 2 * Constants.DaysInYear;
-        var totalAnnualGain = lot1AnnualGain + lot2AnnualGain;
-        var totalCostBasis = lot1.PurchasePrice + lot2.PurchasePrice;
-        annualGain.Amount.Should().Be(totalAnnualGain);
-
-        var totalAnnualGainPercentage = totalAnnualGain / totalCostBasis * 100m;
-        annualGain.Percentage.Should().Be(totalAnnualGainPercentage);
+        annualGain.Amount.Should().Be(lot1.Performance.GetAnnualGain().Amount + lot2.Performance.GetAnnualGain().Amount);
+        annualGain.Percentage.Should().Be(annualGain.Amount / performance.CostBasis.Amount * 100);
     }
 }

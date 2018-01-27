@@ -43,6 +43,17 @@ namespace PortfolioTracker.Core
 
         public string Notes { get; }
 
+        #region IEntity members
+
+        public bool IsSameAs(IEntity other)
+        {
+            return other is Holding otherHolding
+                ? Id == otherHolding.Id
+                : false;
+        }
+
+        #endregion IEntity members
+
         public void RefreshPerformance(
             DateTime now,
             decimal totalCostBasis,
@@ -72,15 +83,19 @@ namespace PortfolioTracker.Core
 
         public MoneyPerformanceIndicators Performance { get; private set; }
 
-        #region IEntity members
-
-        public bool IsSameAs(IEntity other)
+        public decimal GetPurchasePrice()
         {
-            return other is Holding otherHolding
-                ? Id == otherHolding.Id
-                : false;
+            return Lots.Sum(lot => lot.PurchasePrice);
         }
 
-        #endregion IEntity members
+        public decimal GetCurrentPrice()
+        {
+            return Lots.Sum(lot => lot.GetCurrentPrice());
+        }
+
+        public decimal GetAnnualGainAmount()
+        {
+            return Performance.GetAnnualGain().Amount;
+        }
     }
 }

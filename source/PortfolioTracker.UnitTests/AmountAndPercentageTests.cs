@@ -46,4 +46,20 @@ public sealed class AmountAndPercentageTests
         //assert.
         isSame.Should().Be(same);
     }
+
+    [Fact]
+    public void Subtract_Calculates_TotalGain()
+    {
+        //arrange.
+        var sut = new AmountAndPercentage(100, 100);
+        var other = new AmountAndPercentage(10, 100);
+
+        //act.
+        var totalGain = sut.Subtract(other);
+
+        //assert.
+        totalGain.Should().NotBeNull();
+        totalGain.Amount.Should().Be(90);
+        totalGain.Percentage.Should().Be(900); //(100 - 10) / 10 * 100.
+    }
 }

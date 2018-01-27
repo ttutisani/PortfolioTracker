@@ -1,4 +1,5 @@
 ﻿using PortfolioTracker.Core.Markers;
+using System;
 
 namespace PortfolioTracker.Core
 {
@@ -25,5 +26,16 @@ namespace PortfolioTracker.Core
         }
 
         #endregion IValueObject members
+
+        public AmountAndPercentage Subtract(AmountAndPercentage other)
+        {
+            if (other == null)
+                throw new ArgumentNullException(nameof(other));
+
+            var gainAmount = Amount - other.Amount;
+            var gainPercentage = gainAmount / other.Amount * 100;
+
+            return new AmountAndPercentage(gainAmount, gainPercentage);
+        }
     }
 }

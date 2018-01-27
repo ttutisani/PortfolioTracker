@@ -7,15 +7,13 @@ namespace PortfolioTracker.Core
 {
     public sealed class MoneyPerformanceIndicators : IValueObject
     {
-        #region Total to annual conversion strategy
+        #region annual gain calculation strategy
 
         public interface IAnnualGainCalculator
         {
             AmountAndPercentage GetAnnualGain(
                 AmountAndPercentage costBasis,
-                AmountAndPercentage martketValue,
-                AmountAndPercentage totalGain
-                );
+                AmountAndPercentage marketValue);
         }
 
         public sealed class AnnualGainCalculatorForLot : IAnnualGainCalculator
@@ -33,14 +31,18 @@ namespace PortfolioTracker.Core
 
             public AmountAndPercentage GetAnnualGain(
                 AmountAndPercentage costBasis,
-                AmountAndPercentage martketValue,
-                AmountAndPercentage totalGain
-                )
+                AmountAndPercentage marketValue)
             {
+                var totalGain = marketValue.Subtract(costBasis);
+
                 var daysSincePurchase = _now.Subtract(_purchaseDate).Days;
 
-                var annualGainAmount = totalGain.Amount / daysSincePurchase * Constants.DaysInYear;
-                var annualGainPercentage = totalGain.Percentage / daysSincePurchase * Constants.DaysInYear;
+                var annualGainAmount = daysSincePurchase > 0
+                    ? totalGain.Amount / daysSincePurchase * Constants.DaysInYear
+                    : 0;
+                var annualGainPercentage = daysSincePurchase > 0
+                    ? totalGain.Percentage / daysSincePurchase * Constants.DaysInYear
+                    : 0;
 
                 return new AmountAndPercentage(annualGainAmount, annualGainPercentage);
             }
@@ -57,9 +59,7 @@ namespace PortfolioTracker.Core
 
             public AmountAndPercentage GetAnnualGain(
                 AmountAndPercentage costBasis,
-                AmountAndPercentage martketValue,
-                AmountAndPercentage totalGain
-                )
+                AmountAndPercentage marketValue)
             {
                 var annualGainAmount = _lots.Sum(lot => lot.GetAnnualGainAmount());
                 var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
@@ -72,52 +72,68 @@ namespace PortfolioTracker.Core
             }
         }
 
+        public sealed class AnnualGainCalculatorForPortfolio : IAnnualGainCalculator
+        {
+            private readonly IEnumerable<Holding> _holdings;
+
+            public AnnualGainCalculatorForPortfolio(IEnumerable<Holding> holdings)
+            {
+                _holdings = holdings ?? throw new ArgumentNullException(nameof(holdings));
+            }
+
+            public AmountAndPercentage GetAnnualGain(
+                AmountAndPercentage costBasis, 
+                AmountAndPercentage marketValue)
+            {
+                var annualGainAmount = _holdings.Sum(holding => holding.GetAnnualGainAmount());
+                var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
+
+                return new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+            }
+        }
+
         #endregion
 
-        private readonly IAnnualGainCalculator _totalToAnnualGain;
+        private readonly IAnnualGainCalculator _annualGainCalculator;
 
         public MoneyPerformanceIndicators(
             AmountAndPercentage costBasis,
             AmountAndPercentage marketValue,
-            IAnnualGainCalculator totalToAnnualGain)
+            IAnnualGainCalculator annualGainCalculator)
         {
             CostBasis = costBasis ?? throw new ArgumentNullException(nameof(costBasis));
             MarketValue = marketValue ?? throw new ArgumentNullException(nameof(marketValue));
-            _totalToAnnualGain = totalToAnnualGain ?? throw new ArgumentNullException(nameof(totalToAnnualGain));
+            _annualGainCalculator = annualGainCalculator ?? throw new ArgumentNullException(nameof(annualGainCalculator));
         }
 
         public AmountAndPercentage CostBasis { get; }
 
         public AmountAndPercentage MarketValue { get; }
 
+        #region IValueObject members
+
+        public bool IsSameAs(IValueObject other)
+        {
+            return other is MoneyPerformanceIndicators otherPerformance
+                ? CostBasis.IsSameAs(otherPerformance.CostBasis)
+                    && MarketValue.IsSameAs(otherPerformance.MarketValue)
+                : false;
+        }
+
+        #endregion
+
         public AmountAndPercentage GetTotalGain()
         {
-            var totalGainAmount = MarketValue.Amount - CostBasis.Amount;
-            var totalGainPercentage = totalGainAmount / CostBasis.Amount * 100;
-
-            return new AmountAndPercentage(totalGainAmount, totalGainPercentage);
+            return MarketValue.Subtract(CostBasis);
         }
 
         public AmountAndPercentage GetAnnualGain()
         {
             var totalGain = GetTotalGain();
 
-            return _totalToAnnualGain.GetAnnualGain(
-                CostBasis, 
-                MarketValue, 
-                totalGain);
+            return _annualGainCalculator.GetAnnualGain(
+                CostBasis,
+                MarketValue);
         }
-
-        #region IValueObject members
-
-        public bool IsSameAs(IValueObject other)
-        {
-            return other is MoneyPerformanceIndicators otherPerformance
-                ? CostBasis.IsSameAs(otherPerformance.CostBasis) 
-                    && MarketValue.IsSameAs(otherPerformance.MarketValue)
-                : false;
-        }
-
-        #endregion
     }
 }
