@@ -12,7 +12,7 @@ public sealed class HoldingTests
         //arrange.
         var id = Guid.NewGuid();
         var instrument = new Instrument("SYM", "name", 10m);
-        var lots = new List<Lot>() { new Lot(Guid.NewGuid(), DateTime.Now, instrument, 1m) };
+        var lots = new List<ILot>() { new Lot(Guid.NewGuid(), DateTime.Now, instrument, 1m) };
         var notes = "some notes 123";
 
         //act.
@@ -46,7 +46,7 @@ public sealed class HoldingTests
         var instrument = new Instrument("SYM", "name", 10m);
         var badLot = new Lot(Guid.NewGuid(), DateTime.Now, new Instrument("SOM", "name", 10m), 10m, "some other notes");
         
-        var construct = new Action(() => new Holding(Guid.NewGuid(), instrument, new List<Lot> { badLot }));
+        var construct = new Action(() => new Holding(Guid.NewGuid(), instrument, new List<ILot> { badLot }));
 
         //act / assert.
         construct.ShouldThrowExactly<InvalidOperationException>();
@@ -59,7 +59,7 @@ public sealed class HoldingTests
         var instrument = new Instrument("SYM", "name", 10m);
         var lot = new Lot(Guid.NewGuid(), DateTime.Now, instrument, 10m);
 
-        var construct = new Action(() => new Holding(Guid.NewGuid(), instrument, new List<Lot> { lot, lot }));
+        var construct = new Action(() => new Holding(Guid.NewGuid(), instrument, new List<ILot> { lot, lot }));
 
         //act / assert.
         construct.ShouldThrowExactly<InvalidOperationException>();
@@ -106,7 +106,7 @@ public sealed class HoldingTests
         var lot1 = new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-1), instrument, 1m);
         var lot2 = new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-2), instrument, 2m);
 
-        var sut = new Holding(Guid.NewGuid(), instrument, new List<Lot> { lot1, lot2 });
+        var sut = new Holding(Guid.NewGuid(), instrument, new List<ILot> { lot1, lot2 });
 
         //act.
         sut.RefreshPerformance(DateTime.Now, 6m, 16m);

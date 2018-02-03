@@ -3,7 +3,16 @@ using PortfolioTracker.Core.Markers;
 
 namespace PortfolioTracker.Core
 {
-    public sealed class Lot : IEntity, IAggregateRoot
+    public interface ILot : IEntity, IAggregateRoot
+    {
+        bool IsForInstrument(Instrument instrument);
+        decimal PurchasePrice { get; }
+        decimal GetCurrentPrice();
+        void RefreshPerformance(DateTime now, decimal totalLotCostBasis, decimal totalLotMarketValue);
+        decimal GetAnnualGainAmount();
+    }
+
+    public sealed class Lot : ILot
     {
         public Lot(
             Guid id, 

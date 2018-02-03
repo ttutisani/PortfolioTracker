@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Moq;
 using PortfolioTracker.Core;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ public sealed class PortfolioGroupTests
         //arrange.
         var id = Guid.NewGuid();
         var name = "name123";
-        var portfolios = new List<Portfolio>
+        var portfolios = new List<IPortfolio>
         {
             new Portfolio(Guid.NewGuid(), "portfolio-name1"),
             new Portfolio(Guid.NewGuid(), "portfolio-name2")
@@ -33,7 +34,7 @@ public sealed class PortfolioGroupTests
     {
         get
         {
-            var sut = new PortfolioGroup(Guid.NewGuid(), "name123", new List<Portfolio> { new Portfolio(Guid.NewGuid(), "pname123") }, "notes123");
+            var sut = new PortfolioGroup(Guid.NewGuid(), "name123", new List<IPortfolio> { new Portfolio(Guid.NewGuid(), "pname123") }, "notes123");
             var clone = new PortfolioGroup(sut.Id, sut.Name, sut.Portfolios, sut.Notes);
             var same = new PortfolioGroup(sut.Id, "other name");
             var different = new PortfolioGroup(Guid.NewGuid(), sut.Name, sut.Portfolios, sut.Notes);
@@ -57,5 +58,45 @@ public sealed class PortfolioGroupTests
 
         //assert.
         isSame.Should().Be(same);
+    }
+
+    [Fact]
+    public void Performance_Is_Based_On_Portfolios()
+    {
+        //arrange.
+        var portfolio1 = new Mock<IPortfolio>();
+        portfolio1.Setup(p => p.GetPurchasePrice()).Returns(1);
+        portfolio1.Setup(p => p.GetCurrentPrice()).Returns(3);
+
+        var portfolio2 = new Mock<IPortfolio>();
+        portfolio2.Setup(p => p.GetPurchasePrice()).Returns(2);
+        portfolio2.Setup(p => p.GetCurrentPrice()).Returns(4);
+
+        var sut = new PortfolioGroup(Guid.NewGuid(), "name123", new List<IPortfolio> { portfolio1.Object, portfolio2.Object });
+
+        //act.
+        sut.RefreshPerformance(DateTime.Now);
+        var performance = sut.Performance;
+
+        //assert.
+        performance.Should().NotBeNull();
+
+        performance.CostBasis.Should().NotBeNull();
+        performance.CostBasis.Amount.Should().Be(portfolio1.Object.GetPurchasePrice() + portfolio2.Object.GetPurchasePrice());
+        performance.CostBasis.Percentage.Should().Be(100);
+
+        performance.MarketValue.Should().NotBeNull();
+        performance.MarketValue.Amount.Should().Be(portfolio1.Object.GetCurrentPrice() + portfolio2.Object.GetCurrentPrice());
+        performance.MarketValue.Percentage.Should().Be(100);
+
+        var totalGain = performance.GetTotalGain();
+        totalGain.Should().NotBeNull();
+        totalGain.Amount.Should().Be(performance.MarketValue.Amount - performance.CostBasis.Amount);
+        totalGain.Percentage.Should().Be(totalGain.Amount / performance.CostBasis.Amount * 100);
+
+        var annualGain = performance.GetAnnualGain();
+        annualGain.Should().NotBeNull();
+        annualGain.Amount.Should().Be(portfolio1.Object.GetAnnualGainAmount() + portfolio2.Object.GetAnnualGainAmount());
+        annualGain.Percentage.Should().Be(annualGain.Amount / performance.CostBasis.Amount * 100);
     }
 }

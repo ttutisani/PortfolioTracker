@@ -13,7 +13,7 @@ public sealed class PortfolioTests
         var id = Guid.NewGuid();
         var name = "name";
         var instrument = new Instrument("SYM", "name", 1);
-        var holdings = new List<Holding> { new Holding(Guid.NewGuid(), instrument, new List<Lot> { new Lot(Guid.NewGuid(), DateTime.Now, instrument, 1) }) };
+        var holdings = new List<IHolding> { new Holding(Guid.NewGuid(), instrument, new List<ILot> { new Lot(Guid.NewGuid(), DateTime.Now, instrument, 1) }) };
         var notes = "notes";
 
         //act.
@@ -64,7 +64,7 @@ public sealed class PortfolioTests
         var holding1 = new Holding(
             Guid.NewGuid(),
             instrument,
-            new List<Lot> {
+            new List<ILot> {
                 new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-1), instrument, 2),
                 new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-1), instrument, 2)
             });
@@ -72,10 +72,10 @@ public sealed class PortfolioTests
         var holding2 = new Holding(
             Guid.NewGuid(),
             instrument,
-            new List<Lot> { new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-1), instrument, 2) });
+            new List<ILot> { new Lot(Guid.NewGuid(), DateTime.Now.AddDays(-1), instrument, 2) });
 
 
-        var sut = new Portfolio(Guid.NewGuid(), "name", new List<Holding> { holding1, holding2 });
+        var sut = new Portfolio(Guid.NewGuid(), "name", new List<IHolding> { holding1, holding2 });
 
         //act.
         sut.RefreshPerformance(DateTime.Now, 12, 6);

@@ -6,24 +6,32 @@ using PortfolioTracker.Core.Markers;
 
 namespace PortfolioTracker.Core
 {
-    public sealed class Holding : IEntity
+    public interface IHolding : IEntity
+    {
+        decimal GetPurchasePrice();
+        decimal GetCurrentPrice();
+        void RefreshPerformance(DateTime now, decimal totalHoldingCostBasis, decimal totalHoldingMarketValue);
+        decimal GetAnnualGainAmount();
+    }
+
+    public sealed class Holding : IHolding
     {
         public Holding(
             Guid id, 
             Instrument instrument, 
-            IList<Lot> lots = null, 
+            IList<ILot> lots = null, 
             string notes = null)
         {
             Id = id;
             Instrument = instrument ?? throw new ArgumentNullException(nameof(instrument));
 
             ValidateLots(instrument, lots);
-            Lots = new ReadOnlyCollection<Lot>(lots ?? new List<Lot>());
+            Lots = new ReadOnlyCollection<ILot>(lots ?? new List<ILot>());
 
             Notes = notes;
         }
 
-        private static void ValidateLots(Instrument instrument, IList<Lot> lots)
+        private static void ValidateLots(Instrument instrument, IList<ILot> lots)
         {
             if (lots == null)
                 return;
@@ -39,7 +47,7 @@ namespace PortfolioTracker.Core
 
         public Instrument Instrument { get; }
 
-        public ReadOnlyCollection<Lot> Lots { get; }
+        public ReadOnlyCollection<ILot> Lots { get; }
 
         public string Notes { get; }
 

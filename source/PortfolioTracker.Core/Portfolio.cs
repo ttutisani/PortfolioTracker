@@ -6,13 +6,21 @@ using System.Linq;
 
 namespace PortfolioTracker.Core
 {
-    public sealed class Portfolio : IEntity, IAggregateRoot
+    public interface IPortfolio : IEntity, IAggregateRoot
     {
-        public Portfolio(Guid id, string name, IList<Holding> holdings = null, string notes = null)
+        decimal GetPurchasePrice();
+        decimal GetCurrentPrice();
+        void RefreshPerformance(DateTime now, decimal totalCostBasis, decimal totalMarketValue);
+        decimal GetAnnualGainAmount();
+    }
+
+    public sealed class Portfolio : IPortfolio
+    {
+        public Portfolio(Guid id, string name, IList<IHolding> holdings = null, string notes = null)
         {
             Id = id;
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Holdings = new ReadOnlyCollection<Holding>(holdings ?? new List<Holding>());
+            Holdings = new ReadOnlyCollection<IHolding>(holdings ?? new List<IHolding>());
             Notes = notes;
         }
 
@@ -20,7 +28,7 @@ namespace PortfolioTracker.Core
 
         public string Name { get; }
 
-        public ReadOnlyCollection<Holding> Holdings { get; }
+        public ReadOnlyCollection<IHolding> Holdings { get; }
 
         public string Notes { get; }
 
@@ -61,5 +69,20 @@ namespace PortfolioTracker.Core
         }
 
         public MoneyPerformanceIndicators Performance { get; private set; }
+
+        public decimal GetPurchasePrice()
+        {
+            return Holdings.Sum(h => h.GetPurchasePrice());
+        }
+
+        public decimal GetCurrentPrice()
+        {
+            return Holdings.Sum(h => h.GetCurrentPrice());
+        }
+
+        public decimal GetAnnualGainAmount()
+        {
+            return Performance.GetAnnualGain().Amount;
+        }
     }
 }

@@ -50,9 +50,9 @@ namespace PortfolioTracker.Core
 
         public sealed class AnnualGainCalculatorForHolding : IAnnualGainCalculator
         {
-            private readonly IEnumerable<Lot> _lots;
+            private readonly IEnumerable<ILot> _lots;
 
-            public AnnualGainCalculatorForHolding(IEnumerable<Lot> lots)
+            public AnnualGainCalculatorForHolding(IEnumerable<ILot> lots)
             {
                 _lots = lots ?? throw new ArgumentNullException(nameof(lots));
             }
@@ -74,9 +74,9 @@ namespace PortfolioTracker.Core
 
         public sealed class AnnualGainCalculatorForPortfolio : IAnnualGainCalculator
         {
-            private readonly IEnumerable<Holding> _holdings;
+            private readonly IEnumerable<IHolding> _holdings;
 
-            public AnnualGainCalculatorForPortfolio(IEnumerable<Holding> holdings)
+            public AnnualGainCalculatorForPortfolio(IEnumerable<IHolding> holdings)
             {
                 _holdings = holdings ?? throw new ArgumentNullException(nameof(holdings));
             }
@@ -86,6 +86,26 @@ namespace PortfolioTracker.Core
                 AmountAndPercentage marketValue)
             {
                 var annualGainAmount = _holdings.Sum(holding => holding.GetAnnualGainAmount());
+                var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
+
+                return new AmountAndPercentage(annualGainAmount, annualGainPercentage);
+            }
+        }
+
+        public sealed class AnnualGainCalculatorForPortfolioGroup : IAnnualGainCalculator
+        {
+            private readonly IEnumerable<IPortfolio> _portfolios;
+
+            public AnnualGainCalculatorForPortfolioGroup(IEnumerable<IPortfolio> portfolios)
+            {
+                _portfolios = portfolios ?? throw new ArgumentNullException(nameof(portfolios));
+            }
+
+            public AmountAndPercentage GetAnnualGain(
+                AmountAndPercentage costBasis,
+                AmountAndPercentage marketValue)
+            {
+                var annualGainAmount = _portfolios.Sum(portfolio => portfolio.GetAnnualGainAmount());
                 var annualGainPercentage = annualGainAmount / costBasis.Amount * 100;
 
                 return new AmountAndPercentage(annualGainAmount, annualGainPercentage);

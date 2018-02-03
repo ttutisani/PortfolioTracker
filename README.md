@@ -22,3 +22,6 @@ Holding (entity)
 
 Portfolio (entity, aggregate root)
 	represents a single portfolio, aggregating holdings that the portfolio consists of.
+
+PortfolioGroup (entity, aggregate root)
+	represents a set of portfolios, for expressing a bigger picture.
