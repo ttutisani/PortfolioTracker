@@ -18,7 +18,7 @@ namespace PortfolioTracker.Core
     {
         public Holding(
             Guid id, 
-            Instrument instrument, 
+            IInstrument instrument, 
             IList<ILot> lots = null, 
             string notes = null)
         {
@@ -31,7 +31,7 @@ namespace PortfolioTracker.Core
             Notes = notes;
         }
 
-        private static void ValidateLots(Instrument instrument, IList<ILot> lots)
+        private static void ValidateLots(IInstrument instrument, IList<ILot> lots)
         {
             if (lots == null)
                 return;
@@ -45,7 +45,7 @@ namespace PortfolioTracker.Core
 
         public Guid Id { get; }
 
-        public Instrument Instrument { get; }
+        public IInstrument Instrument { get; }
 
         public ReadOnlyCollection<ILot> Lots { get; }
 

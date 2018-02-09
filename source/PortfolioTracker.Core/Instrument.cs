@@ -2,7 +2,12 @@
 
 namespace PortfolioTracker.Core
 {
-    public sealed class Instrument : IEntity, IAggregateRoot
+    public interface IInstrument : IEntity, IAggregateRoot
+    {
+        decimal CurrentPrice { get; }
+    }
+
+    public sealed class Instrument : IInstrument
     {
         public Instrument(string symbol, string name, decimal currentPrice)
         {

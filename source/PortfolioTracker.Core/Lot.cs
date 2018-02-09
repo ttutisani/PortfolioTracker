@@ -5,7 +5,7 @@ namespace PortfolioTracker.Core
 {
     public interface ILot : IEntity, IAggregateRoot
     {
-        bool IsForInstrument(Instrument instrument);
+        bool IsForInstrument(IInstrument instrument);
         decimal PurchasePrice { get; }
         decimal GetCurrentPrice();
         void RefreshPerformance(DateTime now, decimal totalLotCostBasis, decimal totalLotMarketValue);
@@ -17,7 +17,7 @@ namespace PortfolioTracker.Core
         public Lot(
             Guid id, 
             DateTime purchaseDate, 
-            Instrument instrument, 
+            IInstrument instrument, 
             decimal purchasePrice, 
             string notes = null)
         {
@@ -32,7 +32,7 @@ namespace PortfolioTracker.Core
 
         public DateTime PurchaseDate { get; }
 
-        public Instrument Instrument { get; }
+        public IInstrument Instrument { get; }
 
         public decimal PurchasePrice { get; }
 
@@ -75,7 +75,7 @@ namespace PortfolioTracker.Core
 
         public MoneyPerformanceIndicators Performance { get; private set; }
 
-        public bool IsForInstrument(Instrument instrument)
+        public bool IsForInstrument(IInstrument instrument)
         {
             return Instrument.IsSameAs(instrument);
         }
