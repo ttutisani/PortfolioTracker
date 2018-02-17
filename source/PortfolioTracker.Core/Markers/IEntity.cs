@@ -2,6 +2,6 @@
 {
     public interface IEntity
     {
-        bool IsSameAs(IEntity other);
+        bool IsSameAs(object other);
     }
 }

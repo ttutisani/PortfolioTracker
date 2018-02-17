@@ -1,6 +1,6 @@
 ﻿namespace PortfolioTracker.Core.Markers
 {
-    public interface IAggregateRoot
+    public interface IAggregateRoot : IEntity
     {
     }
 }

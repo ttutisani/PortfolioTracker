@@ -1,13 +1,6 @@
-﻿using PortfolioTracker.Core.Markers;
-
-namespace PortfolioTracker.Core
+﻿namespace PortfolioTracker.Core
 {
-    public interface IInstrument : IEntity, IAggregateRoot
-    {
-        decimal CurrentPrice { get; }
-    }
-
-    public sealed class Instrument : IInstrument
+    public sealed class Instrument : Markers.IAggregateRoot
     {
         public Instrument(string symbol, string name, decimal currentPrice)
         {
@@ -20,17 +13,13 @@ namespace PortfolioTracker.Core
 
         public string Name { get; }
 
-        public decimal CurrentPrice { get; }
+        public decimal CurrentPrice { get; set; }
 
-        #region IEntity members
-
-        public bool IsSameAs(IEntity other)
+        public bool IsSameAs(object other)
         {
             return other is Instrument otherInstrument
                 ? Symbol == otherInstrument.Symbol
                 : false;
         }
-
-        #endregion IEntity members
     }
 }

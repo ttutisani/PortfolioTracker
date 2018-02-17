@@ -8,12 +8,6 @@ C# models to track investment portfolios
 Instrument (entity, aggregate root)
 	represents a financial instrument by its symbol, name, and current price.
 
-AmountAndPercentage (value object)
-	contains amount and percentage that this amount represents out of total.
-
-MoneyPerformanceIndicators (value object)
-	represents derived calculations based on cost basis and market value amounts.
-
 Lot (entity, aggregate root)
 	represents a lot - record of financial trade involving Instrument.
 
