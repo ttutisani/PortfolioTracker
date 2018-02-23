@@ -6,13 +6,13 @@ namespace PortfolioTracker.Core
     {
         public Lot(
             Guid id, 
-            string instrumentSymbol, 
+            InstrumentInfo instrumentInfo, 
             DateTime purchaseDate, 
             decimal purchasePrice, 
             string notes = null)
         {
             Id = id;
-            InstrumentSymbol = instrumentSymbol ?? throw new ArgumentNullException(nameof(instrumentSymbol));
+            InstrumentInfo = instrumentInfo ?? throw new ArgumentNullException(nameof(instrumentInfo));
             PurchaseDate = purchaseDate;
             PurchasePrice = purchasePrice;
             Notes = notes;
@@ -20,7 +20,7 @@ namespace PortfolioTracker.Core
 
         public Guid Id { get; }
 
-        public string InstrumentSymbol { get; }
+        public InstrumentInfo InstrumentInfo { get; }
 
         public DateTime PurchaseDate { get; }
 

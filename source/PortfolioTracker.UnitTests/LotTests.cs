@@ -13,17 +13,17 @@ namespace PortfolioTracker.UnitTests
             //arrange.
             var id = Guid.NewGuid();
             var purchaseDate = DateTime.Now;
-            var instrumentSymbol = "SYM";
+            var instrumentInfo = new InstrumentInfo("SYM", "name", 123.45m);
             var purchasePrice = 1m;
             var notes = "some notes";
 
             //act.
-            var sut = new Lot(id, instrumentSymbol, purchaseDate, purchasePrice, notes);
+            var sut = new Lot(id, instrumentInfo, purchaseDate, purchasePrice, notes);
 
             //assert.
             sut.Id.Should().Be(id);
             sut.PurchaseDate.Should().Be(purchaseDate);
-            sut.InstrumentSymbol.Should().Be(instrumentSymbol);
+            sut.InstrumentInfo.Should().Be(instrumentInfo);
             sut.PurchasePrice.Should().Be(purchasePrice);
             sut.Notes.Should().Be(notes);
         }
@@ -32,11 +32,11 @@ namespace PortfolioTracker.UnitTests
         {
             get
             {
-                var sut = new Lot(Guid.NewGuid(), "SYM", DateTime.Now, 10m);
-                var clone = new Lot(sut.Id, sut.InstrumentSymbol, sut.PurchaseDate, sut.PurchasePrice);
-                var same = new Lot(sut.Id, "ANY", DateTime.Now.AddDays(-1), 100m);
-                var notSame = new Lot(Guid.NewGuid(), sut.InstrumentSymbol, sut.PurchaseDate, sut.PurchasePrice);
-                var different = new Lot(Guid.NewGuid(), "SYM2", DateTime.Now.AddDays(-10), 123m);
+                var sut = new Lot(Guid.NewGuid(), new InstrumentInfo("SYM", "name", 123.45m), DateTime.Now, 10m);
+                var clone = new Lot(sut.Id, sut.InstrumentInfo, sut.PurchaseDate, sut.PurchasePrice);
+                var same = new Lot(sut.Id, new InstrumentInfo("ANY", "name", 123.45m), DateTime.Now.AddDays(-1), 100m);
+                var notSame = new Lot(Guid.NewGuid(), sut.InstrumentInfo, sut.PurchaseDate, sut.PurchasePrice);
+                var different = new Lot(Guid.NewGuid(), new InstrumentInfo("SYM2", "name", 123.45m), DateTime.Now.AddDays(-10), 123m);
                 var veryDifferent = new object();
 
                 return new[]
