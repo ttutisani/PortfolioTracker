@@ -13,7 +13,7 @@ namespace PortfolioTracker.Core
         {
             var instrumentInfoWithSymbolOnly = new InstrumentInfo(
                 symbol,
-                "name not yet known",
+                symbol,
                 purchasePrice);
 
             var lot = new Lot(

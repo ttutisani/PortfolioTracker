@@ -7,19 +7,24 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentAssertions" Version="4.19.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.5.0" />
-    <PackageReference Include="Moq" Version="4.8.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
+    <PackageReference Include="Xunit.Gherkin.Quick" Version="1.0.0" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <DotNetCliToolReference Include="dotnet-xunit" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\PortfolioTracker.AppServices\PortfolioTracker.AppServices.csproj" />
-    <ProjectReference Include="..\PortfolioTracker.CLI\PortfolioTracker.CLI.csproj" />
     <ProjectReference Include="..\PortfolioTracker.Core\PortfolioTracker.Core.csproj" />
-    <ProjectReference Include="..\PortfolioTracker.Infrastructure\PortfolioTracker.Infrastructure.csproj" />
+    <ProjectReference Include="..\PortfolioTracker.Hexagon\PortfolioTracker.Hexagon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="AddLot\AddLot.feature">
+      <Generator></Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

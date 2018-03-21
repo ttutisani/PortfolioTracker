@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StructureMap" Version="4.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PortfolioTracker.AppServices\PortfolioTracker.AppServices.csproj" />
+    <ProjectReference Include="..\PortfolioTracker.Core\PortfolioTracker.Core.csproj" />
+    <ProjectReference Include="..\PortfolioTracker.Infrastructure\PortfolioTracker.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>
