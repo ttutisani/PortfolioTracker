@@ -8,8 +8,8 @@ namespace PortfolioTracker.Core
     {
         public Instrument(string symbol, string name, decimal currentPrice)
         {
-            Symbol = symbol ?? throw new System.ArgumentNullException(nameof(symbol));
-            Name = name ?? throw new System.ArgumentNullException(nameof(name));
+            Symbol = symbol ?? throw new ArgumentNullException(nameof(symbol));
+            Name = name ?? throw new ArgumentNullException(nameof(name));
             CurrentPrice = currentPrice;
         }
 
