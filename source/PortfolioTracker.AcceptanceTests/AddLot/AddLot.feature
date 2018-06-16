@@ -14,6 +14,5 @@ Scenario: Add Lot for existing Instrument
 	Given there are no Lots yet in the system
 	And there is an existing Instrument with this info: symbol ABC, name "ABC", current price $111.22
 	When I add Lot with this info: symbol ABC, purchase date 01/02/2003, purchase price $222.33, notes "some of my notes"
-	# existing instrument data is not yet in the new lot (only eventually will get there)
-	Then a new Lot must appear in the system with this info: symbol ABC, purchase date 01/02/2003, purchase price $222.33, notes "some of my notes", Instrument price $222.33
+	Then a new Lot must appear in the system with this info: symbol ABC, purchase date 01/02/2003, purchase price $222.33, notes "some of my notes", Instrument price $111.22
 	And an existing Instrument should stay with this info: symbol ABC, name "ABC", current price $111.22
