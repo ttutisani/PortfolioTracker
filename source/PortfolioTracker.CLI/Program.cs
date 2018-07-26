@@ -10,7 +10,8 @@ namespace PortfolioTracker.CLI
     {
         private static Dictionary<Type, Type> _argumentsHandlers = new Dictionary<Type, Type>
         {
-            { typeof(AddLot.AddLotArguments), typeof(AddLot.AddLotArgumentsHandler) }
+            { typeof(AddLot.AddLotArguments), typeof(AddLot.AddLotArgumentsHandler) },
+            { typeof(ChangeInstrumentPrice.ChangeInstrumentPriceArguments), typeof(ChangeInstrumentPrice.ChangeInstrumentPriceArgumentsHandler) },
         };
 
         static void Main(string[] args)

@@ -20,11 +20,11 @@ namespace PortfolioTracker.Core
 
         public Guid Id { get; }
 
-        public InstrumentInfo InstrumentInfo { get; }
+        public InstrumentInfo InstrumentInfo { get; private set; }
 
         public DateTime PurchaseDate { get; }
 
-        public decimal PurchasePrice { get; set; }
+        public decimal PurchasePrice { get; }
 
         public string Notes { get; set; }
 
@@ -33,6 +33,14 @@ namespace PortfolioTracker.Core
             return other is Lot otherLot
                 ? Id == otherLot.Id
                 : false;
+        }
+
+        public void UpdateInstrumentPrice(decimal newPrice)
+        {
+            InstrumentInfo = new InstrumentInfo(
+                InstrumentInfo.Symbol,
+                InstrumentInfo.Name,
+                newPrice);
         }
     }
 }

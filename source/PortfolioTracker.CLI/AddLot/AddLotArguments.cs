@@ -7,9 +7,9 @@ namespace PortfolioTracker.CLI.AddLot
     /// Command line arguments for adding lot.
     /// </summary>
     /// <example>
-    /// $ addlot ABC 01/02/2003 123.45 --notes="my notes 123"
+    /// $ add-lot ABC 01/02/2003 123.45 --notes="my notes 123"
     /// </example>
-    [Verb("addlot")]
+    [Verb("add-lot")]
     public sealed class AddLotArguments
     {
         [Value(0, Required = true)]

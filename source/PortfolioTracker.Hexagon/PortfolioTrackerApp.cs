@@ -13,9 +13,14 @@ namespace PortfolioTracker.Hexagon
             _container = container ?? throw new ArgumentNullException(nameof(container));
         }
 
-        public ILotService GetLotService()
+        public LotService GetLotService()
         {
             return _container.GetInstance<LotService>();
+        }
+
+        public InstrumentService GetInstrumentService()
+        {
+            return _container.GetInstance<InstrumentService>();
         }
     }
 }

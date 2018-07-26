@@ -1,10 +1,11 @@
-﻿using PortfolioTracker.Core;
+﻿using PortfolioTracker.AppServices;
+using PortfolioTracker.Core;
 using PortfolioTracker.Infrastructure;
 using StructureMap;
 
 namespace PortfolioTracker.Hexagon
 {
-    public static class ContainerBuilder
+    internal static class ContainerBuilder
     {
         public static Container BuildContainer()
         {
@@ -12,13 +13,20 @@ namespace PortfolioTracker.Hexagon
 
             container.Configure(_ => 
             {
+                //events.
                 _.For<IEventManagerSource>().Use(context => new InProcessEventManagerSource(container));
-
                 _.Scan(cfg => 
                 {
-                    //find all event handlers.
-                    cfg.AssemblyContainingType<AppServices.IAssemblyMarker>();
+                    cfg.AssemblyContainingType<IAssemblyMarker>();
                     cfg.ConnectImplementationsToTypesClosing(typeof(IDomainEventHandler<>));
+                });
+
+                //commands.
+                _.For<ICommandManagerSource>().Use(context => new InProcessCommandManagerSource(container));
+                _.Scan(cfg =>
+                {
+                    cfg.AssemblyContainingType<IAssemblyMarker>();
+                    cfg.ConnectImplementationsToTypesClosing(typeof(ICommandHandler<>));
                 });
 
                 _.For<IInstrumentRepository>().Use<InstrumentJsonRepository>();

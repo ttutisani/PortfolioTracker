@@ -3,6 +3,7 @@ using Moq;
 using PortfolioTracker.Core;
 using PortfolioTracker.Core.Markers;
 using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PortfolioTracker.UnitTests
@@ -24,14 +25,21 @@ namespace PortfolioTracker.UnitTests
             var expectedSymbol = "SMB";
             var expectedName = "name 123";
             var expectedPrice = 112121m;
+            var lotIdList = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
 
             //act.
-            var sut = new Instrument(expectedSymbol, expectedName, expectedPrice);
+            var sut = new Instrument(
+                expectedSymbol, 
+                expectedName, 
+                expectedPrice,
+                lotIdList);
 
             //assert.
             sut.Symbol.Should().Be(expectedSymbol);
             sut.Name.Should().Be(expectedName);
             sut.CurrentPrice.Should().Be(expectedPrice);
+
+            sut.LotIdList.Should().Equal(lotIdList);
         }
 
         public static object[][] IsSameAs_Test_Data
@@ -67,5 +75,51 @@ namespace PortfolioTracker.UnitTests
             isSame.Should().Be(same);
         }
 
+        [Theory]
+        [InlineData(0)]
+        [InlineData(-1)]
+        public void UpdatePrice_Expects_Positive_Price(
+            decimal newPrice)
+        {
+            //arrange.
+            var instrument = new Instrument("S12", "some name 123", 1.23m);
+
+            //act / assert.
+            new Action(() => instrument.UpdatePrice(newPrice, new Mock<IEventManager>().Object))
+                .ShouldThrowExactly<ArgumentException>();
+        }
+
+        [Fact]
+        public void UpdatePrice_Requires_EventManager()
+        {
+            //arrange.
+            var instrument = new Instrument("S12", "some name 123", 1.23m);
+
+            //act / assert.
+            new Action(() => instrument.UpdatePrice(2.34m, null))
+                .ShouldThrowExactly<ArgumentNullException>();
+        }
+
+        [Fact]
+        public void UpdatePrice_Changes_CurrentPrice()
+        {
+            //arrange.
+            var instrument = new Instrument("S12", "some name", 1.23m);
+            var newPrice = 23.45m;
+
+            var eventManager = new Mock<IEventManager>();
+
+            //act.
+            instrument.UpdatePrice(newPrice, eventManager.Object);
+
+            //assert.
+            instrument.CurrentPrice.Should().Be(newPrice);
+
+            Predicate<object> isForPriceChange = o =>
+                o is InstrumentPriceChangedDomainEvent priceChanged
+                && priceChanged.InstrumentSymbol == instrument.Symbol;
+
+            eventManager.Verify(m => m.Raise(It.Is<Object>(o => isForPriceChange(o))), Times.Once);
+        }
     }
 }

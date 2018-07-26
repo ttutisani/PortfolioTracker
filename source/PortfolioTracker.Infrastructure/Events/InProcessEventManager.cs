@@ -1,7 +1,6 @@
 ﻿using PortfolioTracker.Core;
 using StructureMap;
 using System.Collections.Generic;
-using System.Reflection;
 
 namespace PortfolioTracker.Infrastructure
 {

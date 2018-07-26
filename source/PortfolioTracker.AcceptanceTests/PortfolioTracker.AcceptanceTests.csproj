@@ -22,7 +22,9 @@
 
   <ItemGroup>
     <None Update="AddLot\AddLot.feature">
-      <Generator></Generator>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="InstrumentPriceChange\InstrumentPriceChange.feature">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

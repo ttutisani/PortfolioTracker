@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using PortfolioTracker.Core;
 using PortfolioTracker.Infrastructure;
+using System;
+using System.Collections.Generic;
 using Xunit;
 
 namespace PortfolioTracker.UnitTests
@@ -11,7 +13,15 @@ namespace PortfolioTracker.UnitTests
         public void FromInstrument_Copies_All_Values()
         {
             //arrange.
-            var instrument = new Instrument("SMB", "name 123", 123.45m);
+            var instrument = new Instrument(
+                "SMB", 
+                "name 123", 
+                123.45m,
+                new List<Guid>
+                {
+                    Guid.NewGuid(),
+                    Guid.NewGuid()
+                });
 
             //act.
             var dto = InstrumentJsonDto.FromInstrument(instrument);
@@ -21,6 +31,7 @@ namespace PortfolioTracker.UnitTests
             dto.Symbol.Should().Be(instrument.Symbol);
             dto.Name.Should().Be(instrument.Name);
             dto.CurrentPrice.Should().Be(instrument.CurrentPrice);
+            dto.LotIdList.Should().Equal(instrument.LotIdList);
         }
 
         [Fact]
@@ -31,7 +42,8 @@ namespace PortfolioTracker.UnitTests
             {
                 Symbol = "ABC",
                 Name = "abc name here",
-                CurrentPrice = 45.123m
+                CurrentPrice = 45.123m,
+                LotIdList = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() }
             };
 
             //act.
@@ -42,6 +54,7 @@ namespace PortfolioTracker.UnitTests
             instrument.Symbol.Should().Be(sut.Symbol);
             instrument.Name.Should().Be(sut.Name);
             instrument.CurrentPrice.Should().Be(sut.CurrentPrice);
+            instrument.LotIdList.Should().Equal(sut.LotIdList);
         }
     }
 }

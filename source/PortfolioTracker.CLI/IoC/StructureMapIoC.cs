@@ -10,6 +10,7 @@ namespace PortfolioTracker.CLI.IoC
 
             var portfolioTrackerApp = new Hexagon.PortfolioTrackerAppBuilder().BuildApp();
             container.Configure(_ => _.For<AppServices.ILotService>().Use(ctx => portfolioTrackerApp.GetLotService()));
+            container.Configure(_ => _.For<AppServices.IInstrumentService>().Use(ctx => portfolioTrackerApp.GetInstrumentService()));
 
             Container = container;
         }

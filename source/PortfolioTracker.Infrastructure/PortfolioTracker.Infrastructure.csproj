@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PortfolioTracker.AppServices\PortfolioTracker.AppServices.csproj" />
     <ProjectReference Include="..\PortfolioTracker.Core\PortfolioTracker.Core.csproj" />
   </ItemGroup>
 

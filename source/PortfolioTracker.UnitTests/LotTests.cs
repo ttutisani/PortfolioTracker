@@ -62,5 +62,26 @@ namespace PortfolioTracker.UnitTests
             //assert.
             isSame.Should().Be(same);
         }
+
+        [Fact]
+        public void UpdateInstrumentPrice_Replaces_Instrument_ValueObject()
+        {
+            //arrange.
+            var instrumentInfo = new InstrumentInfo("GG1", "Golden Gates 1", 1.23m);
+            var sut = new Lot(Guid.NewGuid(), instrumentInfo, new DateTime(2017, 12, 24), 1.23m);
+
+            var newPrice = 2.34m;
+
+            //act.
+            sut.UpdateInstrumentPrice(newPrice);
+
+            //assert.
+            sut.InstrumentInfo.Should().NotBeNull();
+            sut.InstrumentInfo.Should().NotBe(instrumentInfo);
+            sut.InstrumentInfo.IsSameAs(instrumentInfo).Should().BeFalse();
+            sut.InstrumentInfo.Symbol.Should().Be(instrumentInfo.Symbol);
+            sut.InstrumentInfo.Name.Should().Be(instrumentInfo.Name);
+            sut.InstrumentInfo.CurrentPrice.Should().Be(newPrice);
+        }
     }
 }

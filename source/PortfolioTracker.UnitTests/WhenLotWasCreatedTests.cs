@@ -16,8 +16,7 @@ namespace PortfolioTracker.UnitTests
         {
             _sut = new WhenLotWasCreated(
                 _lotRepository.Object, 
-                _instrumentRepository.Object, 
-                new Mock<IEventManagerSource>().Object);
+                _instrumentRepository.Object);
         }
 
         [Fact]
